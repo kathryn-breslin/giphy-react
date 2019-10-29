@@ -1,9 +1,12 @@
 import React, { Component } from "react";
-import { Input } from "../../components";
+import { Input, Gifs } from "../../components";
 import API from "../../utils/API";
+import "./Landing.css";
 
 interface IData {
-  title: string; 
+  data: any;
+  title: string;
+
 }
 
 interface IGif {
@@ -14,8 +17,8 @@ interface IGif {
 
 class Landing extends Component {
   state: IGif = {
-    gifs: [], 
-    title: "", 
+    gifs: [],
+    title: "",
     search: ""
   };
 
@@ -38,24 +41,41 @@ class Landing extends Component {
   };
 
   searchGifs = (search: string) => {
-      console.log("Gif Search: " + search);
-      API.search(search).then(res =>
-        this.setState({ gifs: res.data, search: "" })
-      );
+    console.log("Gif Search: " + search);
+    API.search(search).then(res =>
+      this.setState({ gifs: res.data.data, search: "" })
+    // console.log(res.data.data[0].title)
+    );
       console.log("Gifs array state: " + JSON.stringify(this.state.gifs));
-
-  }
+  };
 
   render() {
-    const { search } = this.state;
+    const { search, gifs } = this.state;
 
     return (
       <div>
         <Input
-        search={search}
-        handleFormSearch={this.handleFormSearch}
-        handleInputChange={this.handleInputChange}
+          search={search}
+          handleFormSearch={this.handleFormSearch}
+          handleInputChange={this.handleInputChange}
         />
+        <div className="container">
+          <div className="row">
+            <div className="col-12">
+                {gifs.length ? (
+                    <Gifs>
+                        {gifs.map(gif => (
+                            <div className="card">
+                                <h5>{gif.title}</h5>
+                            </div>
+                        ))}
+                    </Gifs>
+                ): (
+                    <h1>No Gifs Yet!</h1>
+                )}
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
