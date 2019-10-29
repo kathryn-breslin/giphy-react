@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Input } from "../../components";
-// import API from "../../utils/API";
+import API from "../../utils/API";
 
 interface IData {
   title: string; 
@@ -33,20 +33,24 @@ class Landing extends Component {
     event.preventDefault();
     this.setState({ search: search });
 
-    // this.searchGifs(search);
+    this.searchGifs(search);
     console.log("Search:" + this.state.search);
   };
 
-//   searchGifs = (search: string) => {
-//       console.log("Search: " + search);
-//   }
+  searchGifs = (search: string) => {
+      console.log("Gif Search: " + search);
+      API.search(search).then(res =>
+        this.setState({ gifs: res.data, search: "" })
+      );
+      console.log("Gifs array state: " + JSON.stringify(this.state.gifs));
+
+  }
 
   render() {
     const { search } = this.state;
 
     return (
       <div>
-        {/* <h1>Hello World! This is the landing page.</h1> */}
         <Input
         search={search}
         handleFormSearch={this.handleFormSearch}
